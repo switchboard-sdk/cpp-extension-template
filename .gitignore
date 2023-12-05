@@ -1,2 +1,9 @@
 libs/switchboard-sdk
 *.xcodeproj
+.DS_Store
+sample-app/ios/Info.plist
+src/jvm/build
+.idea
+build
+out
+.cxx

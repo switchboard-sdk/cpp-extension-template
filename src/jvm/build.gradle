@@ -1,0 +1,65 @@
+plugins {
+  // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
+  id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+  id 'java-library'
+}
+
+dependencies {
+  implementation(files("../../libs/switchboard-sdk/jvm/SwitchboardSDK.jar"))
+  
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+  testImplementation 'org.jetbrains.kotlin:kotlin-test'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+test {
+  useJUnitPlatform()
+  testLogging {
+    events 'passed', 'skipped', 'failed'
+  }
+}
+
+sourceSets {
+  main {
+    resources {
+      srcDirs "build/natives/out"
+    }
+  }
+}
+
+compileJava {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+  options.compilerArgs += ["-h", file("src/main/include")]
+}
+
+compileKotlin {
+  kotlinOptions {
+    jvmTarget = "11"
+  }
+}
+
+task compileJNI {
+  dependsOn compileJava
+
+  doLast {
+    exec {
+      commandLine 'sh', '-c', 'mkdir -p build/natives && cd build/natives && cmake ../.. && make'
+    }
+  }
+}
+
+clean.doFirst {
+  delete fileTree('src/main/include') {
+    include 'jni_*.h'
+  }
+}
+
+processResources {
+  dependsOn compileJNI
+}
+
+tasks.withType(Test) {
+  systemProperty "java.library.path", "build/natives/lib"
+  testLogging.showStandardStreams = false
+}

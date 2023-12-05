@@ -1,0 +1,36 @@
+
+# Intellij
+*.iml
+/.idea/encodings.xml
+/.idea/runConfigurations.xml
+/.idea/compiler.xml
+/.idea/gradle.xml
+/.idea/misc.xml
+/.idea/vcs.xml
+/.idea/checkstyle-idea.xml
+/.idea/codeStyleSettings.xml
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/.idea/jarRepositories.xml
+
+# Platform specific files
+.DS_Store
+
+# Gradle Files
+.gradle
+/local.properties
+/build
+/generated
+/mapfiles
+/captures
+.externalNativeBuild
+
+# cmake
+/distribution
+/.idea/deploymentTargetDropDown.xml
+/.idea/gradle.properties
+/.idea/.gitignore
