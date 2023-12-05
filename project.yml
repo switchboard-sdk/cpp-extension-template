@@ -1,0 +1,14 @@
+name: SwitchboardTemplateExtension
+options:
+  bundleIdPrefix: com.synervoz
+targets:
+  SwitchboardTemplateExtensionIOS:
+    type: framework
+    platform: iOS
+    deploymentTarget: "12.3"
+    sources: [src]
+    dependencies:
+      - framework: libs/switchboard-sdk/apple/SwitchboardSDK.xcframework
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      USER_HEADER_SEARCH_PATHS: "libs/switchboard-sdk/apple/SwitchboardSDK.xcframework/ios-arm64/SwitchboardSDK.framework/Headers"
