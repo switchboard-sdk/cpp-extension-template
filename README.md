@@ -1,6 +1,9 @@
-# Switchboard SDK Extension Template
+# Switchboard SDK C++ Extension Template
 
-Welcome to the Switchboard SDK Extension Template repository! This repository provides a starting point for developers looking to create extensions for the Switchboard SDK. By using this template, you can quickly set up your development environment and begin building custom functionality for the Switchboard SDK.
+> [!NOTE]
+> To create a Switchboard SDK WebAudio extension, please check out [switchboard-sd/web-audio-extension-template](https://github.com/switchboard-sdk/web-audio-extension-template).
+
+Welcome to the Switchboard SDK C++ Extension Template repository! This repository provides a starting point for developers looking to create C++ extensions for the Switchboard SDK. By using this template, you can quickly set up your development environment and begin building custom functionality for the Switchboard SDK.
 
 | iOS  | macOS | JVM  | Android | Linux | Windows | Web |
 |:-----|:------|:-----|:--------|:------|:--------|:----|
