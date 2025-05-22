@@ -1,0 +1,24 @@
+{
+    "type": "RealTimeGraphRenderer",
+    "config": {
+        "microphoneEnabled": true,
+        "graph": {
+            "nodes": [
+                {
+                    "id": "processorNode",
+                    "type": "ExampleDSP.ExampleProcessor"
+                }
+            ],
+            "connections": [
+                {
+                    "sourceNode": "inputNode",
+                    "destinationNode": "processorNode"
+                },
+                {
+                    "sourceNode": "processorNode",
+                    "destinationNode": "outputNode"
+                }
+            ]
+        }
+    }
+}
