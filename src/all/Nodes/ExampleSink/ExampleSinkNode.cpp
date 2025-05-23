@@ -1,5 +1,7 @@
 #include "ExampleSinkNode.hpp"
 #include <switchboard/Config.hpp>
+#include <stdexcept>
+#include <cmath>
 
 namespace switchboard::extensions::exampledsp {
 

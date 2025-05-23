@@ -1,0 +1,19 @@
+{
+	"name": "Linux x86-64",
+	"build": {
+		"dockerfile": "../Dockerfile",
+		"args": {
+            "ARCH": "amd64"
+        },
+		"runArgs": ["--platform=linux/amd64"]
+	},
+	"workspaceMount": "source=${localWorkspaceFolder},target=/switchboard,type=bind",
+	"workspaceFolder": "/switchboard",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.cmake-tools"
+			]
+		}
+	}
+}

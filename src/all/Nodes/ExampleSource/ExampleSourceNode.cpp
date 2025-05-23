@@ -1,6 +1,7 @@
 #include "ExampleSourceNode.hpp"
 
 #include <cmath>
+#include <stdexcept>
 #include <switchboard/Config.hpp>
 #include <switchboard_core/Logger.hpp>
 

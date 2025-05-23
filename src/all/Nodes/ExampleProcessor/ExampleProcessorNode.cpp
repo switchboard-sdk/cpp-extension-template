@@ -1,5 +1,6 @@
 #include "ExampleProcessorNode.hpp"
 #include <switchboard/Config.hpp>
+#include <stdexcept>
 
 namespace switchboard::extensions::exampledsp {
 
