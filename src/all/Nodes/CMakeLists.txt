@@ -1,0 +1,3 @@
+add_subdirectory(ExampleSource)
+add_subdirectory(ExampleProcessor)
+add_subdirectory(ExampleSink)

@@ -1,84 +1,81 @@
-# Switchboard SDK C++ Extension Template
+# Switchboard SDK – C++ Extension Template
 
-> [!NOTE]
-> To create a Switchboard SDK WebAudio extension, please check out [switchboard-sd/web-audio-extension-template](https://github.com/switchboard-sdk/web-audio-extension-template).
+Welcome to the **Switchboard SDK C++ Extension Template**! This repository provides a streamlined starting point for developers building custom C++ extensions for the Switchboard SDK. With this template, you can set up your development environment quickly and start implementing your own audio processing nodes.
 
-Welcome to the Switchboard SDK C++ Extension Template repository! This repository provides a starting point for developers looking to create C++ extensions for the Switchboard SDK. By using this template, you can quickly set up your development environment and begin building custom functionality for the Switchboard SDK.
+---
 
-| iOS  | macOS | JVM  | Android | Linux | Windows | Web |
-|:-----|:------|:-----|:--------|:------|:--------|:----|
-| :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | Coming soon | Coming soon | Coming soon | 
+## 🌐 Platform Support
 
+| macOS | Windows | Linux | iOS         | Android     | watchOS     | JVM         | Web         |
+| :---- | :------ | :---- | :---------- | :---------- | :---------- | :---------- | :---------- |
+| ✅     | ✅       | ✅     | Coming soon | Coming soon | Coming soon | Coming soon | Coming soon |
 
-## Getting Started
+---
 
-The project name in this repo is set to `ExampleDSP`. To get started with your extension first run the rename script:
+## 🚀 Getting Started
 
-```bash
-bash scripts/rename.sh
-```
+We recommend compiling and running the provided code before making any changes. This will help you understand the structure and workflow of the project.
 
-After renaming the project, you can run the following script to download the dependencies and generate the project files.
+Key components:
+- **`tasks.py`**: Contains [Invoke](https://www.pyinvoke.org/) commands for common development tasks.
+- **CMake**: The project uses standard CMake tooling for cross-platform builds.
 
-```bash
-bash scripts/setup.sh
-```
+### 🔧 Example Nodes
 
-## Developing the Extension
+This repository includes three example node implementations to demonstrate the architecture:
 
-Sample code is provided for the three different node types. Check out the following source files to get started:
+| Name               | Path                                                      | Description                                                       |
+| ------------------ | --------------------------------------------------------- | ----------------------------------------------------------------- |
+| `ExampleSource`    | `src/all/Nodes/ExampleSource/ExampleSourceNode.cpp`       | Generates a sine wave with adjustable frequency and amplitude.    |
+| `ExampleProcessor` | `src/all/Nodes/ExampleProcessor/ExampleProcessorNode.cpp` | Applies a gain adjustment to the input signal.                    |
+| `ExampleSink`      | `src/all/Nodes/ExampleProcessor/ExampleProcessorNode.cpp` | Measures peak input levels and emits events at defined intervals. |
 
-- src/all/AudioGraphNodes/Source/ExampleSouceNode.cpp
-- src/all/AudioGraphNodes/Processor/ExampleProcessorNode.cpp
-- src/all/AudioGraphNodes/Sink/ExampleSinkNode.cpp
+Each node includes two demo projects located in the `demos/` directory:
 
-### iOS and macOS
+- **Real-time demo**: Uses `RealtimeGraphRenderer` to process audio from the system mic and play it through the speakers.
+- **Offline demo**: Uses `OfflineGraphRenderer` to process audio files and generate output files.
 
-Open the generated xcodeproj file.
+We recommend running these demos to familiarize yourself with how nodes integrate into the SDK.
 
-### JVM
+---
 
-Open the jvm directory in IntelliJ IDEA.
+## 🛠 Creating Your Extension
 
-### Android
-
-Open the android 
-
-
-### Web
-
-Coming soon...
-
-### Linux
-
-Coming soon...
-
-### Windows
-
-Coming soon...
-
-
-## Building the Extension
-
-Run the following command to build the extension package for all platforms:
+The current project is named `ExampleDSP`. To personalize it:
 
 ```bash
-bash scripts/build.sh
+inv rename
 ```
 
-Platform-specific build scripts are also provided.
+This will update the project name and references throughout the codebase. You can then modify the existing examples or start from scratch with your own nodes.
 
+---
 
-## License
+## 🏗 Building the Extension
 
-See the LICENSE.txt file for details.
+Use the platform-specific `build` command to compile the extension:
 
-## Contact
+For example, on Linux:
 
-If you have any questions or need assistance with the Switchboard SDK or this template, please don't hesitate to contact us:
+```bash
+inv build-linux
+```
 
-Email: [hello@synervoz.com](mailto:hello@synervoz.com)
+Additional build commands are available for other platforms. Refer to `tasks.py` for the full list.
 
-Website: [https://docs.switchboard.audio](https://docs.switchboard.audio)
+---
 
-Happy coding! 🚀
+## 📄 License
+
+This project is licensed under the terms outlined in [`LICENSE.txt`](./LICENSE.txt).
+
+---
+
+## 📬 Contact Us
+
+Need help or have questions?
+
+- 📧 Email: [hello@synervoz.com](mailto:hello@synervoz.com)  
+- 📚 Docs: [https://docs.switchboard.audio](https://docs.switchboard.audio)
+
+Happy building! 🎧🚀

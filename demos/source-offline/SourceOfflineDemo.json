@@ -1,0 +1,31 @@
+{
+    "type": "OfflineGraphRenderer",
+    "config": {
+        "sampleRate": 48000,
+        "maxNumberOfSecondsToRender": 3,
+        "outputFiles": [
+            {
+                "filePath": "output.wav",
+                "numberOfChannels": 1
+            }
+        ],
+        "graph": {
+            "nodes": [
+                {
+                    "id": "sourceNode",
+                    "type": "ExampleDSP.ExampleSource",
+                    "config": {
+                        "frequency": 220,
+                        "amplitude": 0.25
+                    }
+                }
+            ],
+            "connections": [
+                {
+                    "sourceNode": "sourceNode",
+                    "destinationNode": "outputNode"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "type": "RealTimeGraphRenderer",
+    "config": {
+        "graph": {
+            "nodes": [
+                {
+                    "id": "sourceNode",
+                    "type": "ExampleDSP.ExampleSource",
+                    "config": {
+                        "frequency": 220,
+                        "amplitude": 0.25
+                    }
+                }
+            ],
+            "connections": [
+                {
+                    "sourceNode": "sourceNode",
+                    "destinationNode": "outputNode"
+                }
+            ]
+        }
+    }
+}

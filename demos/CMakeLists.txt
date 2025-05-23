@@ -1,0 +1,6 @@
+add_subdirectory("source-realtime")
+add_subdirectory("source-offline")
+add_subdirectory("processor-realtime")
+add_subdirectory("processor-offline")
+add_subdirectory("sink-realtime")
+add_subdirectory("sink-offline")

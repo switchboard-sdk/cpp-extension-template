@@ -1,0 +1,23 @@
+{
+    "type": "RealTimeGraphRenderer",
+    "config": {
+        "microphoneEnabled": true,
+        "graph": {
+            "nodes": [
+                {
+                    "id": "sinkNode",
+                    "type": "ExampleDSP.ExampleSink",
+                    "config": {
+                        "eventIntervalFrames": 48000
+                    }
+                }
+            ],
+            "connections": [
+                {
+                    "sourceNode": "inputNode",
+                    "destinationNode": "sinkNode"
+                }
+            ]
+        }
+    }
+}
