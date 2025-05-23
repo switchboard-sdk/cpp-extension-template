@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <switchboard/Config.hpp>
+#include <switchboard_core/Logger.hpp>
 
 namespace switchboard::extensions::exampledsp {
 
@@ -38,22 +39,23 @@ Result<std::any> ExampleSourceNode::getValue(const std::string& key) {
 }
 
 bool ExampleSourceNode::setBusFormat(AudioBusFormat& busFormat) {
-    if (busFormat.numberOfChannels != constants::MONO) {
-        return false;
-    }
     return true;
 }
 
 bool ExampleSourceNode::produce(AudioBus& bus) {
+    const uint numberOfChannels = bus.getBuffer()->getNumberOfChannels();
     const uint numberOfFrames = bus.getBuffer()->getNumberOfFrames();
     const uint sampleRate = bus.getBuffer()->getSampleRate();
-    float* floatBuffer = bus.getBuffer()->getWritePointer(0);
     const float angularFrequency = 2.0f * M_PI * frequency / sampleRate;
     for (uint i = 0; i < numberOfFrames; i++) {
-        floatBuffer[i] = amplitude * sinf(phase);
+        const float sampleValue = amplitude * sinf(phase);
         phase += angularFrequency;
         if (phase >= 2.0f * M_PI) {
             phase -= 2.0f * M_PI;
+        }
+        for (uint channelIndex = 0; channelIndex < numberOfChannels; ++channelIndex) {
+            float* floatBuffer = bus.getBuffer()->getWritePointer(channelIndex);
+            floatBuffer[i] = sampleValue;
         }
     }
     return true;
