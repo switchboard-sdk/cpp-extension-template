@@ -41,6 +41,12 @@ int main(int argc, const char* argv[]) {
     }
     const std::string engineID = result.value().value();
 
+    // Add event listener
+    SwitchboardV3::addEventListener("sinkNode", "peak", [](const std::any& data) {
+        const auto peakValue = std::any_cast<float>(data);
+       std::cout << "Peak value: " << peakValue << std::endl;
+    });
+
     // Start audio engine
     auto startEngineResult = SwitchboardV3::callAction(engineID, "start", {});
     if (startEngineResult.isError()) {

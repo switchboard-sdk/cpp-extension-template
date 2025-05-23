@@ -6,7 +6,10 @@
             "nodes": [
                 {
                     "id": "sinkNode",
-                    "type": "ExampleDSP.ExampleSink"
+                    "type": "ExampleDSP.ExampleSink",
+                    "config": {
+                        "eventIntervalFrames": 48000
+                    }
                 }
             ],
             "connections": [
