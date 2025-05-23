@@ -15,7 +15,7 @@ Node* ExampleDSPNodeFactory::createNode(const std::string& type, const std::map<
         return new ExampleSourceNode(config);
     }
     if (type == "ExampleProcessor") {
-        return new ExampleProcessorNode();
+        return new ExampleProcessorNode(config);
     }
     if (type == "ExampleSink") {
         return new ExampleSinkNode();

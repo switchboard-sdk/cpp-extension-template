@@ -1,7 +1,17 @@
 {
-    "type": "RealTimeGraphRenderer",
+    "type": "OfflineGraphRenderer",
     "config": {
-        "microphoneEnabled": true,
+        "inputFiles": [
+            {
+                "filePath": "input.wav"
+            }
+        ],
+        "outputFiles": [
+            {
+                "filePath": "output.wav",
+                "numberOfChannels": 1
+            }
+        ],
         "graph": {
             "nodes": [
                 {

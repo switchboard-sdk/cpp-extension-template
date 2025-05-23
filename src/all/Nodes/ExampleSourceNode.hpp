@@ -19,8 +19,6 @@ private:
     std::atomic<float> frequency;
     std::atomic<float> amplitude;
     float phase;
-
-    void createParameters();
 };
 
 }

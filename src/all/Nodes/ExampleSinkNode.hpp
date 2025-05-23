@@ -12,9 +12,6 @@ public:
 
     bool setBusFormat(AudioBusFormat& busFormat) override;
     bool consume(AudioBus& bus) override;
-
-private:
-    void createParameters();
 };
 
 }

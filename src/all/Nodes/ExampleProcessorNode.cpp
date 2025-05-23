@@ -1,22 +1,31 @@
 #include "ExampleProcessorNode.hpp"
-#include <switchboard_v2/FloatPointerParameter.hpp>
+#include <switchboard/Config.hpp>
 
 namespace switchboard::extensions::exampledsp {
 
-ExampleProcessorNode::ExampleProcessorNode() : gain {1.0f} {
+ExampleProcessorNode::ExampleProcessorNode(const std::map<std::string, std::any>& config) : gain {1.0f} {
     type = "ExampleProcessorNode";
-    createParameters();
+    for (const auto& [key, value] : config) {
+        Result<void> result = setValue(key, value);
+        if (result.isError()) {
+            throw std::runtime_error("Could not configure ExampleSourceNode object with key: " + key);
+        }
+    }
 }
 
-void ExampleProcessorNode::createParameters() {
-    parameters.push_back(std::make_unique<FloatPointerParameter>(
-        "gain",
-        "Gain",
-        "The gain of the processor.",
-        &gain,
-        0.0f,
-        1.0f
-    ));
+Result<void> ExampleProcessorNode::setValue(const std::string& key, const std::any& value) {
+    if (key == "gain") {
+        this->gain = Config::toFloat(value);
+        return makeSuccess();
+    }
+    return AudioNode::setValue(key, value);
+}
+
+Result<std::any> ExampleProcessorNode::getValue(const std::string& key) {
+    if (key == "gain") {
+        return makeSuccess<std::any>(std::make_any<float>(this->gain));
+    }
+    return AudioNode::getValue(key);
 }
 
 bool ExampleProcessorNode::setBusFormat(AudioBusFormat& inputBusFormat, AudioBusFormat& outputBusFormat) {

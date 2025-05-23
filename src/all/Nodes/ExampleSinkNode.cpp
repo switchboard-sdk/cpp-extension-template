@@ -4,11 +4,6 @@ namespace switchboard::extensions::exampledsp {
 
 ExampleSinkNode::ExampleSinkNode() {
     type = "ExampleSinkNode";
-    createParameters();
-}
-
-void ExampleSinkNode::createParameters() {
-
 }
 
 bool ExampleSinkNode::setBusFormat(AudioBusFormat& busFormat) {
