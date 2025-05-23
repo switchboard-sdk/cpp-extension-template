@@ -3,7 +3,8 @@
     "config": {
         "inputFiles": [
             {
-                "filePath": "input.wav"
+                "filePath": "input.wav",
+                "numberOfChannels": 1
             }
         ],
         "outputFiles": [
