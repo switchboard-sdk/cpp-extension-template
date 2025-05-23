@@ -15,6 +15,10 @@ def clean(ctx):
     pass
 
 @task
+def rename(ctx):
+    ctx.run("scripts/rename.sh")
+
+@task
 def build_macos(ctx):
     """Build the macOS version of the ExampleDSP Extension"""
     pass
