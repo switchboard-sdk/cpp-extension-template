@@ -1,9 +1,3 @@
-target_include_directories(${TARGET_NAME} PRIVATE
-    "./"
-)
-
-target_sources(${TARGET_NAME} PRIVATE
-    "ExampleSourceNode.cpp"
-    "ExampleProcessorNode.cpp"
-    "ExampleSinkNode.cpp"
-)
+add_subdirectory(ExampleSource)
+add_subdirectory(ExampleProcessor)
+add_subdirectory(ExampleSink)
