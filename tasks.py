@@ -19,16 +19,31 @@ def rename(ctx):
     ctx.run("scripts/rename.sh")
 
 @task
-def build_macos(ctx):
+def build_macos(ctx, clean=False, build_type="Release"):
     """Build the macOS version of the ExampleDSP Extension"""
-    pass
+    if clean:
+        ctx.run("rm -rf build")
+    ctx.run(
+        "cmake -B build -G Xcode . &&"
+        "cmake --build build --config {build_type}"
+    )
 
 @task
-def build_linux(ctx):
+def build_linux(ctx, clean=False, build_type="Release"):
     """Build the Linux version of the ExampleDSP Extension"""
-    pass
+    if clean:
+        ctx.run("rm -rf build")
+    ctx.run(
+        "cmake -B build . &&"
+        "cmake --build build --config {build_type}"
+    )
 
 @task
-def build_windows(ctx):
+def build_windows(ctx, clean=False, build_type="Release"):
     """Build the Windows version of the ExampleDSP Extension"""
-    pass
+    if clean:
+        ctx.run("rm -rf build")
+    ctx.run(
+        "cmake -B build . &&"
+        "cmake --build build --config {build_type}"
+    )
