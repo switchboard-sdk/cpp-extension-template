@@ -21,7 +21,7 @@ static std::optional<std::string> readContentsOfTextFile(const std::string& file
 
 int main(int argc, const char* argv[]) {
     // Load JSON
-    std::string engineJSONFilePath = "SinkRealtimeDemo.json";
+    std::string engineJSONFilePath = "SinkOfflineDemo.json";
     auto engineJSON = readContentsOfTextFile(engineJSONFilePath);
     if (!engineJSON.has_value()) {
         std::cerr << "Failed to read engine JSON file: " << engineJSONFilePath << std::endl;
@@ -29,7 +29,11 @@ int main(int argc, const char* argv[]) {
     }
 
     // Init Switchboard SDK and extensions
-    Config sdkConfig({ { "appID", "demo" }, { "appSecret", "demo" } });
+    Config sdkConfig({
+        { "appID", "demo" },
+        { "appSecret", "demo" },
+        { "tempDirPath", "/tmp/switchboard" }
+    });
     SwitchboardV3::initialize(sdkConfig);
     ExampleDSPExtension::initialize();
 
@@ -47,10 +51,10 @@ int main(int argc, const char* argv[]) {
         std::cout << "Peak value: " << peakValue << std::endl;
     });
 
-    // Start audio engine
-    auto startEngineResult = SwitchboardV3::callAction(engineID, "start", {});
-    if (startEngineResult.isError()) {
-        std::cerr << "Failed to start engine: " << startEngineResult.error().value().message << std::endl;
+    // Process audio engine
+    auto processEngineResult = SwitchboardV3::callAction(engineID, "process", {});
+    if (processEngineResult.isError()) {
+        std::cerr << "Failed to start engine: " << processEngineResult.error().value().message << std::endl;
         return 1;
     }
 

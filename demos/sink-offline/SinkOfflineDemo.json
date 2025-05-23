@@ -1,0 +1,28 @@
+{
+    "type": "OfflineGraphRenderer",
+    "config": {
+        "inputFiles": [
+            {
+                "filePath": "input.wav",
+                "numberOfChannels": 1
+            }
+        ],
+        "graph": {
+            "nodes": [
+                {
+                    "id": "sinkNode",
+                    "type": "ExampleDSP.ExampleSink",
+                    "config": {
+                        "eventIntervalFrames": 48000
+                    }
+                }
+            ],
+            "connections": [
+                {
+                    "sourceNode": "inputNode",
+                    "destinationNode": "sinkNode"
+                }
+            ]
+        }
+    }
+}
