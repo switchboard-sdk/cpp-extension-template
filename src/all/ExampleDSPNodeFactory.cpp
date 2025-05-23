@@ -12,7 +12,7 @@ std::string ExampleDSPNodeFactory::getNodeTypePrefix() {
 
 Node* ExampleDSPNodeFactory::createNode(const std::string& type, const std::map<std::string, std::any>& config) {
     if (type == "ExampleSource") {
-        return new ExampleSourceNode();
+        return new ExampleSourceNode(config);
     }
     if (type == "ExampleProcessor") {
         return new ExampleProcessorNode();

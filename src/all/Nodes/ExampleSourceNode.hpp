@@ -4,7 +4,7 @@ namespace switchboard::extensions::exampledsp {
 
 class ExampleSourceNode : public SingleBusAudioSourceNode {
 public:
-    ExampleSourceNode();
+    ExampleSourceNode(const std::map<std::string, std::any>& config);
 
     ~ExampleSourceNode() = default;
 
@@ -12,6 +12,8 @@ public:
 
     bool setBusFormat(AudioBusFormat& busFormat) override;
     bool produce(AudioBus& bus) override;
+    Result<void> setValue(const std::string& key, const std::any& value) override;
+    Result<std::any> getValue(const std::string& key) override;
 
 private:
     std::atomic<float> frequency;

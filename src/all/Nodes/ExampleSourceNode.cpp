@@ -1,32 +1,40 @@
 #include "ExampleSourceNode.hpp"
-#include <switchboard_v2/FloatPointerParameter.hpp>
 
 #include <cmath>
+#include <switchboard/Config.hpp>
 
 namespace switchboard::extensions::exampledsp {
 
-ExampleSourceNode::ExampleSourceNode() : frequency {440.0f}, amplitude {0.8f}, phase {0.0f} {
+ExampleSourceNode::ExampleSourceNode(const std::map<std::string, std::any>& config) : frequency {440.0f}, amplitude {0.8f}, phase {0.0f} {
     type = "ExampleSourceNode";
-    createParameters();
+    for (const auto& [key, value] : config) {
+        Result<void> result = setValue(key, value);
+        if (result.isError()) {
+            throw std::runtime_error("Could not configure ExampleSourceNode object with key: " + key);
+        }
+    }
 }
 
-void ExampleSourceNode::createParameters() {
-    parameters.push_back(std::make_unique<FloatPointerParameter>(
-        "frequency",
-        "Frequency",
-        "The frequency of the sine wave in Hz.",
-        &frequency,
-        0,
-        22000
-    ));
-    parameters.push_back(std::make_unique<FloatPointerParameter>(
-        "amplitude",
-        "Amplitude",
-        "The amplitude of the sine wave.",
-        &amplitude,
-        0,
-        1
-    ));
+Result<void> ExampleSourceNode::setValue(const std::string& key, const std::any& value) {
+    if (key == "frequency") {
+        this->frequency = Config::toFloat(value);
+        return makeSuccess();
+    }
+    if (key == "amplitude") {
+        this->amplitude = Config::toFloat(value);
+        return makeSuccess();
+    }
+    return AudioNode::setValue(key, value);
+}
+
+Result<std::any> ExampleSourceNode::getValue(const std::string& key) {
+    if (key == "frequency") {
+        return makeSuccess<std::any>(std::make_any<float>(this->frequency));
+    }
+    if (key == "amplitude") {
+        return makeSuccess<std::any>(std::make_any<float>(this->amplitude));
+    }
+    return AudioNode::getValue(key);
 }
 
 bool ExampleSourceNode::setBusFormat(AudioBusFormat& busFormat) {
