@@ -32,3 +32,21 @@ jobs:
             -w /workspace \
             sb-devcontainer \
             inv build-linux
+
+      - name: Run Offline binaries
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace/out/bin \
+            sb-devcontainer \
+            ./SourceOffline
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace/out/bin \
+            sb-devcontainer \
+            ./ProcessorOffline
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace/out/bin \
+            sb-devcontainer \
+            ./SinkOffline
