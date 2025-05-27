@@ -55,7 +55,6 @@ endif ()
 
 install(
     TARGETS "SwitchboardExampleDSP"
-    FRAMEWORK DESTINATION lib
 )
 
 # Tests

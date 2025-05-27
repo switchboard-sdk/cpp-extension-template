@@ -21,19 +21,32 @@ This file contains functions for creating applications using the Switchboard SDK
 # TODO: Generate documentation for this file using the procedure described in https://gitlab.com/Pro1/doxygen-cmake-sphinx
 
 function(switchboard_add_console_app)
-    cmake_parse_arguments(ARGS "" "" "EXTENSIONS" ${ARGN})
+    cmake_parse_arguments(ARGS "" "" "EXTENSIONS;TARGETS" ${ARGN})
     set(TARGET_NAME ${ARGV0})
     set(EXTENSIONS ${ARGS_EXTENSIONS})
+    set(TARGETS ${ARGS_TARGETS})
     add_executable(${TARGET_NAME})
 
     find_package(SwitchboardSDK REQUIRED COMPONENTS ${EXTENSIONS})
     target_link_libraries(${TARGET_NAME} PRIVATE ${SwitchboardSDK_LIBRARIES})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${TARGETS})
+
     if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+        set(TARGET_FILE_DIRS "")
+        foreach(target ${TARGETS})
+            get_target_property(dir ${target} RUNTIME_OUTPUT_DIRECTORY)
+            if(NOT dir)
+            set(dir "$<TARGET_FILE_DIR:${target}>")
+            endif()
+            list(APPEND TARGET_FILE_DIRS "${dir}")
+        endforeach()
         install(TARGETS ${TARGET_NAME}
                 RUNTIME_DEPENDENCIES
                 PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-" "nvcuda.dll" "cublas" "cudart"
                 POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
-                DIRECTORIES ${SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE}
+                DIRECTORIES
+                    ${SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE}
+                    ${TARGET_FILE_DIRS}
         )
         foreach(library ${SwitchboardSDK_LIBRARIES})
             install(IMPORTED_RUNTIME_ARTIFACTS ${library})
