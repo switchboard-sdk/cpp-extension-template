@@ -1,0 +1,34 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build devcontainer image
+        run: |
+          docker build \
+            -t sb-devcontainer \
+            -f .devcontainer/Dockerfile \
+            .
+
+      - name: Run setup inside container
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            sb-devcontainer \
+            inv setup
+
+      - name: Run build-linux inside container
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            sb-devcontainer \
+            inv build-linux
