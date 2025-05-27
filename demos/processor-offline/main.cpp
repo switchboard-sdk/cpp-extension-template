@@ -52,10 +52,6 @@ int main(int argc, const char* argv[]) {
         return 1;
     }
 
-    // Wait for user to press a key
-    std::cout << "Press any key to stop the engine..." << std::endl;
-    std::cin.get();
-
     // Stop and tear down audio engine
     SwitchboardV3::callAction(engineID, "stop", {});
     SwitchboardV3::destroyObject(engineID);

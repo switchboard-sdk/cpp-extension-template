@@ -53,6 +53,11 @@ if (CMAKE_SYSTEM_NAME MATCHES "iOS|Darwin|watchOS")
     )
 endif ()
 
+install(
+    TARGETS "SwitchboardExampleDSP"
+    FRAMEWORK DESTINATION lib
+)
+
 # Tests
 #add_catch_test_target(${TARGET_NAME})
 

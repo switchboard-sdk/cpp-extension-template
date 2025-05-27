@@ -8,20 +8,18 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get install -yqq --no-install-recommends \
           build-essential \
           curl \
+          ca-certificates \
           git \
           gdb \
           libssl-dev \
           ninja-build \
-          openjdk-17-jdk \
           python3 \
           python3-invoke \
           tzdata \
           unzip \
-          shellcheck \
-          libchromaprint-tools \
           libasound2-dev \
-          libpulse-dev \
-          awscli && \
+          libpulse-dev && \
+  update-ca-certificates && \
   apt-get autoremove -yqq --purge && \
   rm -rf /var/lib/apt/lists/*
 

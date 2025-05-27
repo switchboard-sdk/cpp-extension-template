@@ -24,8 +24,9 @@ def build_macos(ctx, clean=False, build_type="Release"):
     if clean:
         ctx.run("rm -rf build")
     ctx.run(
-        "cmake -B build -G Xcode . &&"
-        "cmake --build build --config {build_type}"
+        f"cmake -B build -G Xcode . &&"
+        f"cmake --build build --config {build_type} &&"
+        f"cmake --install build --config {build_type} --prefix out"
     )
 
 @task
@@ -34,8 +35,9 @@ def build_linux(ctx, clean=False, build_type="Release"):
     if clean:
         ctx.run("rm -rf build")
     ctx.run(
-        "cmake -B build . &&"
-        "cmake --build build --config {build_type}"
+        f"cmake -B build . &&"
+        f"cmake --build build --config {build_type} &&"
+        f"cmake --install build --config {build_type} --prefix out"
     )
 
 @task
@@ -44,6 +46,7 @@ def build_windows(ctx, clean=False, build_type="Release"):
     if clean:
         ctx.run("rm -rf build")
     ctx.run(
-        "cmake -B build . &&"
-        "cmake --build build --config {build_type}"
+        f"cmake -B build . &&"
+        f"cmake --build build --config {build_type} &&"
+        f"cmake --install build --config {build_type} --prefix out"
     )
