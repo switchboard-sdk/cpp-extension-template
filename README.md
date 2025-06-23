@@ -1,5 +1,7 @@
 # Switchboard SDK – C++ Extension Template
 
+[![Build](https://github.com/switchboard-sdk/cpp-extension-template/actions/workflows/build.yml/badge.svg)](https://github.com/switchboard-sdk/cpp-extension-template/actions/workflows/build.yml)
+
 Welcome to the **Switchboard SDK C++ Extension Template**! This repository provides a streamlined starting point for developers building custom C++ extensions for the Switchboard SDK. With this template, you can set up your development environment quickly and start implementing your own audio processing nodes.
 
 ---
