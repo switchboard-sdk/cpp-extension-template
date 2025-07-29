@@ -17,7 +17,7 @@ ExampleSinkNode::ExampleSinkNode(const std::map<std::string, std::any>& config) 
 
 Result<void> ExampleSinkNode::setValue(const std::string& key, const std::any& value) {
     if (key == "eventIntervalFrames") {
-        this->eventIntervalFrames = Config::toUInt(value);
+        this->eventIntervalFrames = Config::convert<unsigned int>(value);
         return makeSuccess();
     }
     return AudioNode::setValue(key, value);
@@ -25,7 +25,7 @@ Result<void> ExampleSinkNode::setValue(const std::string& key, const std::any& v
 
 Result<std::any> ExampleSinkNode::getValue(const std::string& key) {
     if (key == "eventIntervalFrames") {
-        return makeSuccess<std::any>(std::make_any<uint>(this->eventIntervalFrames));
+        return makeSuccess<std::any>(this->eventIntervalFrames);
     }
     return AudioNode::getValue(key);
 }

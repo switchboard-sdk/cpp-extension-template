@@ -16,7 +16,7 @@ ExampleProcessorNode::ExampleProcessorNode(const std::map<std::string, std::any>
 
 Result<void> ExampleProcessorNode::setValue(const std::string& key, const std::any& value) {
     if (key == "gain") {
-        this->gain = Config::toFloat(value);
+        this->gain = Config::convert<float>(value);
         return makeSuccess();
     }
     return AudioNode::setValue(key, value);

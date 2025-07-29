@@ -16,6 +16,7 @@ def clean(ctx):
 
 @task
 def rename(ctx):
+    """Renames the full ExampleDSP Extension project to a specific name"""
     ctx.run("scripts/rename.sh")
 
 @task
