@@ -29,13 +29,16 @@ int main(int argc, const char* argv[]) {
     }
 
     // Init Switchboard SDK and extensions
+    ExampleDSPExtension::load();
     Config sdkConfig({
         { "appID", "demo" },
         { "appSecret", "demo" },
-        { "tempDirPath", "/tmp/switchboard" }
+        { "tempDirPath", "/tmp/switchboard" },
+        { "extensions", Config({
+            { "ExampleDSP", Config() }
+        })}
     });
     Switchboard::initialize(sdkConfig);
-    ExampleDSPExtension::initialize();
 
     // Create audio engine
     Result<Switchboard::ObjectID> result = Switchboard::createEngine(engineJSON.value());
