@@ -1,10 +1,17 @@
 #pragma once
 
+#include <switchboard_core/Extension.hpp>
+
 namespace switchboard::extensions::exampledsp {
 
-class ExampleDSPExtension final {
+class ExampleDSPExtension final : public Extension {
 public:
-    static void initialize();
+    static void load();
+
+    // Overridden methods
+    
+    std::string getName() override;
+    std::shared_ptr<NodeFactory> getNodeFactory() override;
 };
 
 }

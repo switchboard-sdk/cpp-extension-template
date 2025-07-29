@@ -19,11 +19,11 @@ ExampleSourceNode::ExampleSourceNode(const std::map<std::string, std::any>& conf
 
 Result<void> ExampleSourceNode::setValue(const std::string& key, const std::any& value) {
     if (key == "frequency") {
-        this->frequency = Config::toFloat(value);
+        this->frequency = Config::convert<float>(value);
         return makeSuccess();
     }
     if (key == "amplitude") {
-        this->amplitude = Config::toFloat(value);
+        this->amplitude = Config::convert<float>(value);
         return makeSuccess();
     }
     return AudioNode::setValue(key, value);

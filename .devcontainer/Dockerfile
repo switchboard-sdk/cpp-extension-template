@@ -1,5 +1,5 @@
 ARG ARCH=amd64
-FROM --platform=linux/$ARCH ubuntu:jammy
+FROM --platform=linux/$ARCH ubuntu:24.04
 
 ARG ARCH
 
@@ -23,9 +23,9 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get autoremove -yqq --purge && \
   rm -rf /var/lib/apt/lists/*
 
-# Install CMake 3.30.5
+# Install CMake 3.31.6
 RUN CMAKE_ARCH=$(uname -m) && \
-    curl -fsSL -o cmake_install.sh "https://github.com/Kitware/CMake/releases/download/v3.30.5/cmake-3.30.5-linux-${CMAKE_ARCH}.sh" && \
+    curl -fsSL -o cmake_install.sh "https://github.com/Kitware/CMake/releases/download/v3.31.6/cmake-3.31.6-linux-${CMAKE_ARCH}.sh" && \
     chmod +x cmake_install.sh && \
     ./cmake_install.sh --skip-license --prefix=/usr/local/ && \
     rm cmake_install.sh

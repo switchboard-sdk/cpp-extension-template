@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <switchboard/SwitchboardV3.hpp>
+#include <switchboard/Switchboard.hpp>
 
 #include "ExampleDSPExtension.hpp"
 
@@ -29,28 +29,33 @@ int main(int argc, const char* argv[]) {
     }
 
     // Init Switchboard SDK and extensions
-    Config sdkConfig({ { "appID", "demo" }, { "appSecret", "demo" } });
-    SwitchboardV3::initialize(sdkConfig);
-    ExampleDSPExtension::initialize();
+    ExampleDSPExtension::load();
+    Config sdkConfig({
+        { "appID", "demo" },
+        { "appSecret", "demo" },
+        { "extensions", Config({
+            { "ExampleDSP", Config() }
+        })} });
+    Switchboard::initialize(sdkConfig);
 
     // Create audio engine
-    Result<SwitchboardV3::ObjectID> result = SwitchboardV3::createEngine(engineJSON.value());
+    Result<Switchboard::ObjectID> result = Switchboard::createEngine(engineJSON.value());
     if (result.isError()) {
-        std::cerr << "Failed to create engine: " << result.error().value().message << std::endl;
+        std::cerr << "Failed to create engine: " << result.error().message << std::endl;
         return 1;
     }
-    const std::string engineID = result.value().value();
+    const std::string engineID = result.value();
 
     // Add event listener
-    SwitchboardV3::addEventListener("sinkNode", "peak", [](const std::any& data) {
+    Switchboard::addEventListener("sinkNode", "peak", [](const std::any& data) {
         const auto peakValue = std::any_cast<float>(data);
         std::cout << "Peak value: " << peakValue << std::endl;
     });
 
     // Start audio engine
-    auto startEngineResult = SwitchboardV3::callAction(engineID, "start", {});
+    auto startEngineResult = Switchboard::callAction(engineID, "start", {});
     if (startEngineResult.isError()) {
-        std::cerr << "Failed to start engine: " << startEngineResult.error().value().message << std::endl;
+        std::cerr << "Failed to start engine: " << startEngineResult.error().message << std::endl;
         return 1;
     }
 
@@ -59,7 +64,7 @@ int main(int argc, const char* argv[]) {
     std::cin.get();
 
     // Stop and tear down audio engine
-    SwitchboardV3::callAction(engineID, "stop", {});
-    SwitchboardV3::destroyObject(engineID);
+    Switchboard::callAction(engineID, "stop", {});
+    Switchboard::destroyEngine(engineID);
     return 0;
 }
