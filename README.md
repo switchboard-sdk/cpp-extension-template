@@ -30,7 +30,7 @@ This repository includes three example node implementations to demonstrate the a
 | ------------------ | --------------------------------------------------------- | ----------------------------------------------------------------- |
 | `ExampleSource`    | `src/all/Nodes/ExampleSource/ExampleSourceNode.cpp`       | Generates a sine wave with adjustable frequency and amplitude.    |
 | `ExampleProcessor` | `src/all/Nodes/ExampleProcessor/ExampleProcessorNode.cpp` | Applies a gain adjustment to the input signal.                    |
-| `ExampleSink`      | `src/all/Nodes/ExampleProcessor/ExampleProcessorNode.cpp` | Measures peak input levels and emits events at defined intervals. |
+| `ExampleSink`      | `src/all/Nodes/ExampleSink/ExampleSinkNode.cpp`           | Measures peak input levels and emits events at defined intervals. |
 
 Each node includes two demo projects located in the `demos/` directory:
 
