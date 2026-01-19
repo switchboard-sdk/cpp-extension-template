@@ -4,7 +4,7 @@
 set(SwitchboardSDK_FOUND FALSE)
 
 if(NOT DEFINED SWITCHBOARD_PACKAGE_VERSION)
-    set(SWITCHBOARD_PACKAGE_VERSION "3.0.0") # Default version
+    set(SWITCHBOARD_PACKAGE_VERSION "3.1.0") # Default version
 endif()
 
 # Detect platform (adjust as needed)
