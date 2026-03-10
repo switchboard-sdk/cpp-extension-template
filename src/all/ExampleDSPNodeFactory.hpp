@@ -5,11 +5,12 @@
 namespace switchboard::extensions::exampledsp {
 
 class ExampleDSPNodeFactory : public NodeFactory {
+public:
+    ExampleDSPNodeFactory();
 
     // MARK: Overridden methods
 
     std::string getNodeTypePrefix() override;
-    Node* createNode(const std::string& type, const std::map<std::string, std::any>& config) override;
 };
 
 }

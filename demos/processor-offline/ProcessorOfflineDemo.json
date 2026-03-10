@@ -1,5 +1,5 @@
 {
-    "type": "OfflineGraphRenderer",
+    "type": "Offline",
     "config": {
         "inputFiles": [
             {

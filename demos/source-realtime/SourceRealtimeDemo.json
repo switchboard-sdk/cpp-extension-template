@@ -1,5 +1,5 @@
 {
-    "type": "RealTimeGraphRenderer",
+    "type": "Realtime",
     "config": {
         "graph": {
             "nodes": [

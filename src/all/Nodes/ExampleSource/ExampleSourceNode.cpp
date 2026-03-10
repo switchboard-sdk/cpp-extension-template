@@ -1,42 +1,52 @@
 #include "ExampleSourceNode.hpp"
 
 #include <cmath>
-#include <stdexcept>
-#include <switchboard/Config.hpp>
 #include <switchboard_core/Logger.hpp>
 
 namespace switchboard::extensions::exampledsp {
 
-ExampleSourceNode::ExampleSourceNode(const std::map<std::string, std::any>& config) : frequency {440.0f}, amplitude {0.8f}, phase {0.0f} {
+ExampleSourceNode::ExampleSourceNode(const SBAnyMap& config) : frequency {440.0f}, amplitude {0.8f}, phase {0.0f} {
     type = "ExampleSourceNode";
-    for (const auto& [key, value] : config) {
-        Result<void> result = setValue(key, value);
-        if (result.isError()) {
-            throw std::runtime_error("Could not configure ExampleSourceNode object with key: " + key);
-        }
-    }
-}
 
-Result<void> ExampleSourceNode::setValue(const std::string& key, const std::any& value) {
-    if (key == "frequency") {
-        this->frequency = Config::convert<float>(value);
-        return makeSuccess();
-    }
-    if (key == "amplitude") {
-        this->amplitude = Config::convert<float>(value);
-        return makeSuccess();
-    }
-    return AudioNode::setValue(key, value);
-}
+    const auto frequencyParam = SBAnyMap::get<float>(config, "frequency", 440.0f);
+    frequency.store(frequencyParam);
 
-Result<std::any> ExampleSourceNode::getValue(const std::string& key) {
-    if (key == "frequency") {
-        return makeSuccess<std::any>(std::make_any<float>(this->frequency));
-    }
-    if (key == "amplitude") {
-        return makeSuccess<std::any>(std::make_any<float>(this->amplitude));
-    }
-    return AudioNode::getValue(key);
+    const auto amplitudeParam = SBAnyMap::get<float>(config, "amplitude", 1.0f);
+    amplitude.store(amplitudeParam);
+
+    registerProperty(
+    "frequency",
+    { { PROPERTY_FIELD_DESCRIPTION, "The frequency of the sine wave in Hz." },
+      { PROPERTY_FIELD_TYPE, PROPERTY_TYPE_FLOAT },
+      { PROPERTY_FIELD_MIN_VALUE, 0.0f },
+      { PROPERTY_FIELD_MAX_VALUE, 22000.0f },
+      { PROPERTY_FIELD_DEFAULT_VALUE, frequency.load() },
+      { PROPERTY_FIELD_GETTER, std::function([this]() -> Result<SBAny> {
+            return makeSuccess<SBAny>(frequency.load());
+        }) },
+      { PROPERTY_FIELD_SETTER, std::function([this](const SBAny& value) -> Result<void> {
+            const auto newFrequency = SBAny::convert<float>(value);
+            frequency.store(newFrequency);
+            return makeSuccess();
+        }) } }
+);
+
+    registerProperty(
+        "amplitude",
+        { { PROPERTY_FIELD_DESCRIPTION, "The amplitude of the sine wave in the range of [0, 1]." },
+          { PROPERTY_FIELD_TYPE, PROPERTY_TYPE_FLOAT },
+          { PROPERTY_FIELD_MIN_VALUE, 0.0f },
+          { PROPERTY_FIELD_MAX_VALUE, 1.0f },
+          { PROPERTY_FIELD_DEFAULT_VALUE, amplitude.load() },
+          { PROPERTY_FIELD_GETTER, std::function([this]() -> Result<SBAny> {
+                return makeSuccess<SBAny>(amplitude.load());
+            }) },
+          { PROPERTY_FIELD_SETTER, std::function([this](const SBAny& value) -> Result<void> {
+                const auto newAmplitude = SBAny::convert<float>(value);
+                amplitude.store(newAmplitude);
+                return makeSuccess();
+            }) } }
+    );
 }
 
 bool ExampleSourceNode::setBusFormat(AudioBusFormat& busFormat) {

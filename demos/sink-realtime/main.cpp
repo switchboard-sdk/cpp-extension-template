@@ -15,7 +15,7 @@ static std::optional<std::string> readContentsOfTextFile(const std::string& file
         return std::nullopt;
     }
     std::ifstream fileStream(filePath);
-    std::string fileContent((std::istreambuf_iterator<char>(fileStream)), std::istreambuf_iterator<char>());
+    std::string fileContent((std::istreambuf_iterator(fileStream)), std::istreambuf_iterator<char>());
     return fileContent;
 }
 
@@ -30,11 +30,11 @@ int main(int argc, const char* argv[]) {
 
     // Init Switchboard SDK and extensions
     ExampleDSPExtension::load();
-    Config sdkConfig({
+    SBAnyMap sdkConfig({
         { "appID", "demo" },
         { "appSecret", "demo" },
-        { "extensions", Config({
-            { "ExampleDSP", Config() }
+        { "extensions", SBAnyMap({
+            { "ExampleDSP", SBAnyMap() }
         })} });
     Switchboard::initialize(sdkConfig);
 

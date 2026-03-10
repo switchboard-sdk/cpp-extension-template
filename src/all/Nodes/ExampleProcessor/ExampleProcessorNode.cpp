@@ -1,37 +1,34 @@
 #include "ExampleProcessorNode.hpp"
-#include <switchboard/Config.hpp>
-#include <stdexcept>
 
 namespace switchboard::extensions::exampledsp {
 
-ExampleProcessorNode::ExampleProcessorNode(const std::map<std::string, std::any>& config) : gain {1.0f} {
+ExampleProcessorNode::ExampleProcessorNode(const SBAnyMap& config) : gain {1.0f} {
     type = "ExampleProcessorNode";
-    for (const auto& [key, value] : config) {
-        Result<void> result = setValue(key, value);
-        if (result.isError()) {
-            throw std::runtime_error("Could not configure ExampleSourceNode object with key: " + key);
-        }
-    }
-}
 
-Result<void> ExampleProcessorNode::setValue(const std::string& key, const std::any& value) {
-    if (key == "gain") {
-        this->gain = Config::convert<float>(value);
-        return makeSuccess();
-    }
-    return AudioNode::setValue(key, value);
-}
+    const auto gainParam = SBAnyMap::get<float>(config, "gain", 1.0f);
+    gain.store(gainParam);
 
-Result<std::any> ExampleProcessorNode::getValue(const std::string& key) {
-    if (key == "gain") {
-        return makeSuccess<std::any>(std::make_any<float>(this->gain));
-    }
-    return AudioNode::getValue(key);
+    registerProperty(
+        "gain",
+        { { PROPERTY_FIELD_DESCRIPTION, "The gain of the audio signal. The range is [0, 1]." },
+          { PROPERTY_FIELD_TYPE, PROPERTY_TYPE_FLOAT },
+          { PROPERTY_FIELD_MIN_VALUE, 0.0f },
+          { PROPERTY_FIELD_MAX_VALUE, 1.0f },
+          { PROPERTY_FIELD_DEFAULT_VALUE, gain.load() },
+          { PROPERTY_FIELD_GETTER, std::function([this]() -> Result<SBAny> {
+                return makeSuccess<SBAny>(gain.load());
+            }) },
+          { PROPERTY_FIELD_SETTER, std::function([this](const SBAny& value) -> Result<void> {
+                const auto newGain = SBAny::convert<float>(value);
+                gain.store(newGain);
+                return makeSuccess();
+            }) } }
+    );
 }
 
 bool ExampleProcessorNode::setBusFormat(AudioBusFormat& inputBusFormat, AudioBusFormat& outputBusFormat) {
     return AudioBusFormat::matchBusFormats(inputBusFormat, outputBusFormat);
-};
+}
 
 bool ExampleProcessorNode::process(AudioBus& inBus, AudioBus& outBus) {
     AudioBuffer<float>& inBuffer = *inBus.buffer;

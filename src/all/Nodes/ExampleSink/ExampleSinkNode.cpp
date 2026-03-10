@@ -1,33 +1,28 @@
 #include "ExampleSinkNode.hpp"
-#include <switchboard/Config.hpp>
-#include <stdexcept>
 #include <cmath>
 
 namespace switchboard::extensions::exampledsp {
 
-ExampleSinkNode::ExampleSinkNode(const std::map<std::string, std::any>& config) : peakValue {0.0f}, eventIntervalFrames {48000}, frameCounter {0} {
+ExampleSinkNode::ExampleSinkNode(const SBAnyMap& config) : peakValue {0.0f}, eventIntervalFrames {48000}, frameCounter {0} {
     type = "ExampleSinkNode";
-    for (const auto& [key, value] : config) {
-        Result<void> result = setValue(key, value);
-        if (result.isError()) {
-            throw std::runtime_error("Could not configure ExampleSourceNode object with key: " + key);
-        }
-    }
-}
 
-Result<void> ExampleSinkNode::setValue(const std::string& key, const std::any& value) {
-    if (key == "eventIntervalFrames") {
-        this->eventIntervalFrames = Config::convert<unsigned int>(value);
-        return makeSuccess();
-    }
-    return AudioNode::setValue(key, value);
-}
+    const auto eventIntervalFramesParams = SBAnyMap::get<unsigned int>(config, "eventIntervalFrames", 1000.0f);
+    eventIntervalFrames = eventIntervalFramesParams;
 
-Result<std::any> ExampleSinkNode::getValue(const std::string& key) {
-    if (key == "eventIntervalFrames") {
-        return makeSuccess<std::any>(this->eventIntervalFrames);
-    }
-    return AudioNode::getValue(key);
+    registerProperty(
+        "eventIntervalFrames",
+        { { PROPERTY_FIELD_TYPE, PROPERTY_TYPE_INT },
+      { PROPERTY_FIELD_UNIT, PROPERTY_UNIT_MS },
+      { PROPERTY_FIELD_DESCRIPTION, "Interval in milliseconds between timer events." },
+      { PROPERTY_FIELD_MIN_VALUE, 1 },
+      { PROPERTY_FIELD_MAX_VALUE, 60000 },
+      { PROPERTY_FIELD_GETTER, std::function([this]() -> SBAny {
+            return this->eventIntervalFrames;
+        }) },
+      { PROPERTY_FIELD_SETTER, std::function([this](const SBAny& value) {
+            this->eventIntervalFrames = SBAny::convert<unsigned int>(value);
+        }) } }
+    );
 }
 
 bool ExampleSinkNode::setBusFormat(AudioBusFormat& busFormat) {
