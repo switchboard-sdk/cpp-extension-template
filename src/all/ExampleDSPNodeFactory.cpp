@@ -6,21 +6,20 @@
 
 namespace switchboard::extensions::exampledsp {
 
-std::string ExampleDSPNodeFactory::getNodeTypePrefix() {
-    return "ExampleDSP";
+ExampleDSPNodeFactory::ExampleDSPNodeFactory() {
+    registerNode(ExampleSourceNode::getNodeTypeInfo(), [](const SBAnyMap& config) {
+        return new ExampleSourceNode(config);
+    });
+    registerNode(ExampleProcessorNode::getNodeTypeInfo(), [](const SBAnyMap& config) {
+        return new ExampleProcessorNode(config);
+    });
+    registerNode(ExampleSinkNode::getNodeTypeInfo(), [](const SBAnyMap& config) {
+        return new ExampleSinkNode(config);
+    });
 }
 
-Node* ExampleDSPNodeFactory::createNode(const std::string& type, const std::map<std::string, std::any>& config) {
-    if (type == "ExampleSource") {
-        return new ExampleSourceNode(config);
-    }
-    if (type == "ExampleProcessor") {
-        return new ExampleProcessorNode(config);
-    }
-    if (type == "ExampleSink") {
-        return new ExampleSinkNode(config);
-    }
-    return nullptr;
+std::string ExampleDSPNodeFactory::getNodeTypePrefix() {
+    return "ExampleDSP";
 }
 
 }

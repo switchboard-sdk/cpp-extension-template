@@ -1,19 +1,28 @@
+#pragma once
+
+#include <switchboard_core/NodeTypeInfo.hpp>
 #include <switchboard_core/SingleBusAudioSourceNode.hpp>
 
 namespace switchboard::extensions::exampledsp {
 
 class ExampleSourceNode : public SingleBusAudioSourceNode {
 public:
-    ExampleSourceNode(const std::map<std::string, std::any>& config);
+    static NodeTypeInfo getNodeTypeInfo() {
+        return NodeTypeInfo { SWITCHBOARD_NODE_NAMESPACE,
+                              "ExampleSource",
+                              "ExampleSource",
+                              "Example source node.",
+                              { NODE_CATEGORY_AUDIO_PROCESSING } };
+    }
 
-    ~ExampleSourceNode() = default;
+    explicit ExampleSourceNode(const SBAnyMap& config);
+
+    ~ExampleSourceNode() override = default;
 
 #pragma mark Overridden methods
 
     bool setBusFormat(AudioBusFormat& busFormat) override;
     bool produce(AudioBus& bus) override;
-    Result<void> setValue(const std::string& key, const std::any& value) override;
-    Result<std::any> getValue(const std::string& key) override;
 
 private:
     std::atomic<float> frequency;

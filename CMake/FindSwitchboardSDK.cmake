@@ -4,7 +4,7 @@
 set(SwitchboardSDK_FOUND FALSE)
 
 if(NOT DEFINED SWITCHBOARD_PACKAGE_VERSION)
-    set(SWITCHBOARD_PACKAGE_VERSION "3.0.0") # Default version
+    set(SWITCHBOARD_PACKAGE_VERSION "3.2.0") # Default version
 endif()
 
 # Detect platform (adjust as needed)
@@ -22,11 +22,7 @@ set(SwitchboardSDK_DIR "${CMAKE_BINARY_DIR}/SwitchboardSDK")
 
 # Function to download and extract a zip package
 function(download_and_extract url file_name output_dir)
-    if(${SwitchboardSDK_PLATFORM} STREQUAL "windows")
-        set(zip_file "${SwitchboardSDK_DIR}/Downloads/${file_name}.tar.gz")
-    else()
-        set(zip_file "${SwitchboardSDK_DIR}/Downloads/${file_name}.zip")
-    endif()
+    set(zip_file "${SwitchboardSDK_DIR}/Downloads/${file_name}.zip")
 
     # Ensure the Downloads directory exists
     file(MAKE_DIRECTORY "${SwitchboardSDK_DIR}/Downloads")
@@ -67,12 +63,7 @@ function(find_switchboard_package PACKAGE_NAME PACKAGE_VERSION)
         return()
     endif ()
 
-    # Construct the URL dynamically
-    if (${SwitchboardSDK_PLATFORM} STREQUAL "windows")
-        set(SWITCHBOARD_PACKAGE_URL "https://switchboard-sdk-public.s3.amazonaws.com/builds/release/${PACKAGE_VERSION}/${SwitchboardSDK_PLATFORM}/${PACKAGE_NAME}.tar.gz")
-    else()
-        set(SWITCHBOARD_PACKAGE_URL "https://switchboard-sdk-public.s3.amazonaws.com/builds/release/${PACKAGE_VERSION}/${SwitchboardSDK_PLATFORM}/${PACKAGE_NAME}.zip")
-    endif()
+    set(SWITCHBOARD_PACKAGE_URL "https://switchboard-sdk-public.s3.amazonaws.com/builds/release/${PACKAGE_VERSION}/${SwitchboardSDK_PLATFORM}/${PACKAGE_NAME}.zip")
     set(SWITCHBOARD_PACKAGE_DIR "${SwitchboardSDK_DIR}/libs/${PACKAGE_NAME}/${SwitchboardSDK_PLATFORM}/${PACKAGE_VERSION}")
 
     # Download and extract the package
