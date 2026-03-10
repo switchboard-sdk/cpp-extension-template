@@ -22,11 +22,7 @@ set(SwitchboardSDK_DIR "${CMAKE_BINARY_DIR}/SwitchboardSDK")
 
 # Function to download and extract a zip package
 function(download_and_extract url file_name output_dir)
-    if(${SwitchboardSDK_PLATFORM} STREQUAL "windows")
-        set(zip_file "${SwitchboardSDK_DIR}/Downloads/${file_name}.tar.gz")
-    else()
-        set(zip_file "${SwitchboardSDK_DIR}/Downloads/${file_name}.zip")
-    endif()
+    set(zip_file "${SwitchboardSDK_DIR}/Downloads/${file_name}.zip")
 
     # Ensure the Downloads directory exists
     file(MAKE_DIRECTORY "${SwitchboardSDK_DIR}/Downloads")
