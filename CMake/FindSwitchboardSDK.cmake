@@ -63,12 +63,7 @@ function(find_switchboard_package PACKAGE_NAME PACKAGE_VERSION)
         return()
     endif ()
 
-    # Construct the URL dynamically
-    if (${SwitchboardSDK_PLATFORM} STREQUAL "windows")
-        set(SWITCHBOARD_PACKAGE_URL "https://switchboard-sdk-public.s3.amazonaws.com/builds/release/${PACKAGE_VERSION}/${SwitchboardSDK_PLATFORM}/${PACKAGE_NAME}.tar.gz")
-    else()
-        set(SWITCHBOARD_PACKAGE_URL "https://switchboard-sdk-public.s3.amazonaws.com/builds/release/${PACKAGE_VERSION}/${SwitchboardSDK_PLATFORM}/${PACKAGE_NAME}.zip")
-    endif()
+    set(SWITCHBOARD_PACKAGE_URL "https://switchboard-sdk-public.s3.amazonaws.com/builds/release/${PACKAGE_VERSION}/${SwitchboardSDK_PLATFORM}/${PACKAGE_NAME}.zip")
     set(SWITCHBOARD_PACKAGE_DIR "${SwitchboardSDK_DIR}/libs/${PACKAGE_NAME}/${SwitchboardSDK_PLATFORM}/${PACKAGE_VERSION}")
 
     # Download and extract the package
