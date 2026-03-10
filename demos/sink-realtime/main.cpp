@@ -47,8 +47,9 @@ int main(int argc, const char* argv[]) {
     const std::string engineID = result.value();
 
     // Add event listener
-    Switchboard::addEventListener("sinkNode", "peak", [](const std::any& data) {
-        const auto peakValue = std::any_cast<float>(data);
+    Switchboard::addEventListener("sinkNode", "peak", [](const Event& event) {
+        const auto params = SBAny::convert<SBAnyMap>(event.data);
+        const auto peakValue = SBAny::convert<float>(params.at("peak"));
         std::cout << "Peak value: " << peakValue << std::endl;
     });
 

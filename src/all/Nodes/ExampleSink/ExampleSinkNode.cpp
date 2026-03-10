@@ -6,14 +6,14 @@ namespace switchboard::extensions::exampledsp {
 ExampleSinkNode::ExampleSinkNode(const SBAnyMap& config) : peakValue {0.0f}, eventIntervalFrames {48000}, frameCounter {0} {
     type = "ExampleSinkNode";
 
-    const auto eventIntervalFramesParams = SBAnyMap::get<unsigned int>(config, "eventIntervalFrames", 1000.0f);
+    const auto eventIntervalFramesParams = SBAnyMap::get<unsigned int>(config, "eventIntervalFrames", 48000);
     eventIntervalFrames = eventIntervalFramesParams;
 
     registerProperty(
         "eventIntervalFrames",
         { { PROPERTY_FIELD_TYPE, PROPERTY_TYPE_INT },
       { PROPERTY_FIELD_UNIT, PROPERTY_UNIT_MS },
-      { PROPERTY_FIELD_DESCRIPTION, "Interval in milliseconds between timer events." },
+      { PROPERTY_FIELD_DESCRIPTION, "Interval in frames between timer events." },
       { PROPERTY_FIELD_MIN_VALUE, 1 },
       { PROPERTY_FIELD_MAX_VALUE, 60000 },
       { PROPERTY_FIELD_GETTER, std::function([this]() -> SBAny {
@@ -22,6 +22,21 @@ ExampleSinkNode::ExampleSinkNode(const SBAnyMap& config) : peakValue {0.0f}, eve
       { PROPERTY_FIELD_SETTER, std::function([this](const SBAny& value) {
             this->eventIntervalFrames = SBAny::convert<unsigned int>(value);
         }) } }
+    );
+
+    registerEvent(
+        "peak",
+        { { EVENT_FIELD_NAME, "peak" },
+            { EVENT_FIELD_DESCRIPTION, "Emitted when peak is detected in the input audio buffer." },
+            { EVENT_FIELD_DATA,
+            SBAnyMap(
+                { { "peak",
+                    SBAnyMap(
+                        { { EVENT_DATA_FIELD_NAME, "peak" },
+                          { EVENT_DATA_FIELD_TYPE, EVENT_DATA_TYPE_FLOAT },
+                          { EVENT_DATA_FIELD_DESCRIPTION, "The peak value of input audio." } }
+                    ) } }
+            ) } }
     );
 }
 
@@ -42,7 +57,8 @@ bool ExampleSinkNode::consume(AudioBus& bus) {
         }
         frameCounter++;
         if (frameCounter == eventIntervalFrames) {
-            emitEvent("peak", peakValue);
+            const SBAnyMap eventData = { { "peak", peakValue } };
+            emitEvent("peak", eventData);
             peakValue = 0.0f;
             frameCounter = 0;
         }
