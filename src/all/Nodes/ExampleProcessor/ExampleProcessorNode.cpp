@@ -3,8 +3,6 @@
 namespace switchboard::extensions::exampledsp {
 
 ExampleProcessorNode::ExampleProcessorNode(const SBAnyMap& config) : gain {1.0f} {
-    type = "ExampleProcessorNode";
-
     const auto gainParam = SBAnyMap::get<float>(config, "gain", 1.0f);
     gain.store(gainParam);
 
@@ -12,6 +10,7 @@ ExampleProcessorNode::ExampleProcessorNode(const SBAnyMap& config) : gain {1.0f}
         "gain",
         { { PROPERTY_FIELD_DESCRIPTION, "The gain of the audio signal. The range is [0, 1]." },
           { PROPERTY_FIELD_TYPE, PROPERTY_TYPE_FLOAT },
+          { PROPERTY_FIELD_READ_ONLY, false },
           { PROPERTY_FIELD_MIN_VALUE, 0.0f },
           { PROPERTY_FIELD_MAX_VALUE, 1.0f },
           { PROPERTY_FIELD_DEFAULT_VALUE, gain.load() },

@@ -11,6 +11,7 @@ public:
     // Overridden methods
     
     std::string getName() override;
+    std::string getDescription() override;
     std::shared_ptr<NodeFactory> getNodeFactory() override;
 };
 

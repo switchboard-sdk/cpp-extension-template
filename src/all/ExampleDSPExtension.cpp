@@ -14,6 +14,10 @@ std::string ExampleDSPExtension::getName() {
     return "ExampleDSP";
 }
 
+std::string ExampleDSPExtension::getDescription() {
+    return "Example DSP extension demonstrating source, processor, and sink nodes.";
+}
+
 std::shared_ptr<NodeFactory> ExampleDSPExtension::getNodeFactory() {
     return std::make_shared<ExampleDSPNodeFactory>();
 }
