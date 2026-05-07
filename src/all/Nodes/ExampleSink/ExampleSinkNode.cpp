@@ -4,14 +4,13 @@
 namespace switchboard::extensions::exampledsp {
 
 ExampleSinkNode::ExampleSinkNode(const SBAnyMap& config) : peakValue {0.0f}, eventIntervalFrames {48000}, frameCounter {0} {
-    type = "ExampleSinkNode";
-
     const auto eventIntervalFramesParams = SBAnyMap::get<unsigned int>(config, "eventIntervalFrames", 48000);
     eventIntervalFrames = eventIntervalFramesParams;
 
     registerProperty(
         "eventIntervalFrames",
         { { PROPERTY_FIELD_TYPE, PROPERTY_TYPE_INT },
+      { PROPERTY_FIELD_READ_ONLY, false },
       { PROPERTY_FIELD_UNIT, PROPERTY_UNIT_MS },
       { PROPERTY_FIELD_DESCRIPTION, "Interval in frames between timer events." },
       { PROPERTY_FIELD_MIN_VALUE, 1 },
