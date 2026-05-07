@@ -18,6 +18,13 @@ else()
     message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
 endif()
 
+# Normalize arch name to match SDK zip layout (Windows reports AMD64, zips use x86_64)
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
+    set(SwitchboardSDK_ARCH "x86_64")
+else()
+    set(SwitchboardSDK_ARCH "${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+
 set(SwitchboardSDK_DIR "${CMAKE_BINARY_DIR}/SwitchboardSDK")
 
 # Function to download and extract a zip package
@@ -72,33 +79,31 @@ function(find_switchboard_package PACKAGE_NAME PACKAGE_VERSION)
 
     # Define package as an INTERFACE library
     add_library(${PACKAGE_NAME} SHARED IMPORTED)
-    if(${SwitchboardSDK_PLATFORM} STREQUAL "linux")
-        target_include_directories(${PACKAGE_NAME} INTERFACE ${SWITCHBOARD_PACKAGE_DIR}/${CMAKE_SYSTEM_PROCESSOR}/include)
+    if(${SwitchboardSDK_PLATFORM} STREQUAL "macos")
+        target_include_directories(${PACKAGE_NAME} INTERFACE ${SWITCHBOARD_PACKAGE_DIR}/Release/include)
     else()
-        target_include_directories(${PACKAGE_NAME} INTERFACE ${SWITCHBOARD_PACKAGE_DIR}/include)
+        target_include_directories(${PACKAGE_NAME} INTERFACE ${SWITCHBOARD_PACKAGE_DIR}/${SwitchboardSDK_ARCH}/include)
     endif()
     if(${SwitchboardSDK_PLATFORM} STREQUAL "macos")
         set_target_properties(${PACKAGE_NAME} PROPERTIES
-            IMPORTED_LOCATION "${SWITCHBOARD_PACKAGE_DIR}/${PACKAGE_NAME}.xcframework"
+            IMPORTED_LOCATION "${SWITCHBOARD_PACKAGE_DIR}/Release/${PACKAGE_NAME}.xcframework"
         )
         # if macos-arm64_x86_64 directory exists, use it
-        if(EXISTS "${SWITCHBOARD_PACKAGE_DIR}/${PACKAGE_NAME}.xcframework/macos-arm64_x86_64")
-            set(FRAMEWORK_PATH "${SWITCHBOARD_PACKAGE_DIR}/${PACKAGE_NAME}.xcframework/macos-arm64_x86_64/${PACKAGE_NAME}.framework")
+        if(EXISTS "${SWITCHBOARD_PACKAGE_DIR}/Release/${PACKAGE_NAME}.xcframework/macos-arm64_x86_64")
+            set(FRAMEWORK_PATH "${SWITCHBOARD_PACKAGE_DIR}/Release/${PACKAGE_NAME}.xcframework/macos-arm64_x86_64/${PACKAGE_NAME}.framework")
         else()
-            set(FRAMEWORK_PATH "${SWITCHBOARD_PACKAGE_DIR}/${PACKAGE_NAME}.xcframework/macos-arm64/${PACKAGE_NAME}.framework")
+            set(FRAMEWORK_PATH "${SWITCHBOARD_PACKAGE_DIR}/Release/${PACKAGE_NAME}.xcframework/macos-arm64/${PACKAGE_NAME}.framework")
         endif()
         set(SwitchboardSDK_FRAMEWORK_PATHS ${SwitchboardSDK_FRAMEWORK_PATHS} ${FRAMEWORK_PATH} PARENT_SCOPE)
     elseif(${SwitchboardSDK_PLATFORM} STREQUAL "windows")
         set_target_properties(${PACKAGE_NAME} PROPERTIES
-            IMPORTED_IMPLIB_RELEASE "${SWITCHBOARD_PACKAGE_DIR}/Release/AMD64/${PACKAGE_NAME}.lib"
-            IMPORTED_LOCATION_RELEASE "${SWITCHBOARD_PACKAGE_DIR}/Release/AMD64/${PACKAGE_NAME}.dll"
-            IMPORTED_IMPLIB "${SWITCHBOARD_PACKAGE_DIR}/Debug/AMD64/${PACKAGE_NAME}.lib"
-            IMPORTED_LOCATION "${SWITCHBOARD_PACKAGE_DIR}/Debug/AMD64/${PACKAGE_NAME}.dll"
+            IMPORTED_IMPLIB "${SWITCHBOARD_PACKAGE_DIR}/${SwitchboardSDK_ARCH}/lib/${PACKAGE_NAME}.lib"
+            IMPORTED_LOCATION "${SWITCHBOARD_PACKAGE_DIR}/${SwitchboardSDK_ARCH}/bin/${PACKAGE_NAME}.dll"
         )
-        list(APPEND SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE ${SWITCHBOARD_PACKAGE_DIR}/Release/AMD64 PARENT_SCOPE)
+        list(APPEND SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE ${SWITCHBOARD_PACKAGE_DIR}/${SwitchboardSDK_ARCH}/bin PARENT_SCOPE)
     elseif(${SwitchboardSDK_PLATFORM} STREQUAL "linux")
         set_target_properties(${PACKAGE_NAME} PROPERTIES
-            IMPORTED_LOCATION "${SWITCHBOARD_PACKAGE_DIR}/${CMAKE_SYSTEM_PROCESSOR}/lib/lib${PACKAGE_NAME}.so"
+            IMPORTED_LOCATION "${SWITCHBOARD_PACKAGE_DIR}/${SwitchboardSDK_ARCH}/lib/lib${PACKAGE_NAME}.so"
         )
     else ()
         message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
@@ -111,7 +116,7 @@ endfunction()
 find_switchboard_package("SwitchboardSDK" "${SWITCHBOARD_PACKAGE_VERSION}")
 if (SwitchboardSDK_FOUND)
     set(SwitchboardSDK_LIBRARIES ${SwitchboardSDK_LIBRARIES} "SwitchboardSDK")
-    set(SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE ${SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE} "${SwitchboardSDK_DIR}/libs/SwitchboardSDK/${SwitchboardSDK_PLATFORM}/${SWITCHBOARD_PACKAGE_VERSION}/Release/AMD64")
+    set(SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE ${SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE} "${SwitchboardSDK_DIR}/libs/SwitchboardSDK/${SwitchboardSDK_PLATFORM}/${SWITCHBOARD_PACKAGE_VERSION}/${SwitchboardSDK_ARCH}/bin")
 else()
     message(SEND_ERROR "Could not find SwitchboardSDK")
 endif ()
@@ -122,7 +127,7 @@ foreach(_comp IN LISTS SwitchboardSDK_FIND_COMPONENTS)
     find_switchboard_package(${_comp} "${SWITCHBOARD_PACKAGE_VERSION}")
     if(${_comp}_FOUND)
         set(package_dir "${SwitchboardSDK_DIR}/libs/${_comp}/${SwitchboardSDK_PLATFORM}/${SWITCHBOARD_PACKAGE_VERSION}")
-        set(SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE ${SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE} ${package_dir}/Release/AMD64)
+        set(SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE ${SwitchboardSDK_PACKAGE_DIRECTORIES_RELEASE} ${package_dir}/${SwitchboardSDK_ARCH}/bin)
         set(SwitchboardSDK_LIBRARIES ${SwitchboardSDK_LIBRARIES} ${_comp})
     else()
         list(APPEND _missing_components ${_comp})
