@@ -6,8 +6,6 @@
 namespace switchboard::extensions::exampledsp {
 
 ExampleSourceNode::ExampleSourceNode(const SBAnyMap& config) : frequency {440.0f}, amplitude {0.8f}, phase {0.0f} {
-    type = "ExampleSourceNode";
-
     const auto frequencyParam = SBAnyMap::get<float>(config, "frequency", 440.0f);
     frequency.store(frequencyParam);
 
@@ -18,6 +16,7 @@ ExampleSourceNode::ExampleSourceNode(const SBAnyMap& config) : frequency {440.0f
     "frequency",
     { { PROPERTY_FIELD_DESCRIPTION, "The frequency of the sine wave in Hz." },
       { PROPERTY_FIELD_TYPE, PROPERTY_TYPE_FLOAT },
+      { PROPERTY_FIELD_READ_ONLY, false },
       { PROPERTY_FIELD_MIN_VALUE, 0.0f },
       { PROPERTY_FIELD_MAX_VALUE, 22000.0f },
       { PROPERTY_FIELD_DEFAULT_VALUE, frequency.load() },
@@ -35,6 +34,7 @@ ExampleSourceNode::ExampleSourceNode(const SBAnyMap& config) : frequency {440.0f
         "amplitude",
         { { PROPERTY_FIELD_DESCRIPTION, "The amplitude of the sine wave in the range of [0, 1]." },
           { PROPERTY_FIELD_TYPE, PROPERTY_TYPE_FLOAT },
+          { PROPERTY_FIELD_READ_ONLY, false },
           { PROPERTY_FIELD_MIN_VALUE, 0.0f },
           { PROPERTY_FIELD_MAX_VALUE, 1.0f },
           { PROPERTY_FIELD_DEFAULT_VALUE, amplitude.load() },
